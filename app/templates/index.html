@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+    <div class="container" style="width: 100%;">
+    <div class="row centered pygempick-headers" style="text-align: left; float: center; width: 100%;">
+    <h1> PyGemPick has sucessfully processed <strong>{{ imgs_count }} images</strong>!</h1>
+    <div class="col-md-2" style="width: 50%; padding: 3%;">
+    <h2>Update your lab buddies on your progress, {{ current_user.username }}!</h2>
+    {% if form %}
+    {{ wtf.quick_form(form) }}
+    {% endif %}
+    <p>View pyGemPick's Github Repository: 
+    <a href="https://github.com/jmarsil/pygempick" target="_blank"><i class='fa fa-github'></i></a> 
+    </p>  
+    </div>
+    <div class="col-md-2" style="width: 50%;padding: 3%;">
+    {% if my_tasks %}
+    <h2 style="text-align: center;">Here are your completed tasks!</h2>
+    <ol>
+    {% for i in length %}
+    <li>
+    <h4><strong>Task completed on: {{ params[i].timestamp }}</strong></h4>
+    <p> <strong>Results:</strong> {{ my_tasks[i].description }}</p>
+    </li>
+    {% endfor %}
+    </ol>
+    <p class="home-btn" style="text-align: center"><a class="btn-success btn-lg" href="{{ url_for('main.download')}}"> Download Related Files</a></p>
+    {% else %}
+    <h2> You havn't processed any images yet! </h2>
+    <br>
+    <p class="home-btn" style="text-align: center"><a class="btn-success btn-lg" style="text-align: center;" href="{{ url_for('main.pygempick')}}"> Start picking gold!</a></p>
+    {% endif %}
+    </div>
+    </div>
+    
+    <div class="row" style="text-align: left; float: center;">
+    <br>
+    {% for post in posts %}
+        {% include '_post.html' %}
+    {% endfor %}
+    </div>
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+    <div class="container non-auth-back" id="non-auth-home">
+    <div class="row" style="text-align: left; float: center;">
+        <h1 style="text-align: center !important;" >Sign In</h1>
+        <br>
+        <div class="col-md-4 centered">
+            {{ wtf.quick_form(form) }}
+        <br>
+        <p>New User? <a href="{{ url_for('auth.register') }}">Click to Register!</a></p>
+        <p> Forgot Your Password? 
+        <a href="{{ url_for('auth.reset_password_request' )}}"> Click to Reset It</a>
+        </p>
+        <p>View pyGemPick's Github Repository: 
+        <a href="https://github.com/jmarsil/pygempick" target="_blank"><i class='fa fa-github'></i></a> 
+        </p>        
+        </div>
+    </div>
+    </div>
+    <!--
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(size=32) }}<br>
+            {% for error in form.username.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    -->
+    
+{% endblock %}

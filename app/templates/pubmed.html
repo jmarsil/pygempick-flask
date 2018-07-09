@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+<div class="container">
+    <div class="row pygempick-headers" id="pubmed-search" style="text-align: left; float: center;">
+        <h1 style="text-align: center !important;" >Pubmed Article Search</h1>
+        <br>
+        <div class="col-md-4 centered">
+            {{ wtf.quick_form(form) }}
+        <br>
+        <p>View pyGemPick's Github Repository: 
+        <a href="https://github.com/jmarsil/pygempick" target="_blank"><i class='fa fa-github'></i></a> 
+        </p>        
+        </div>
+    </div>
+    <div class="row" style="text-align: left; float: center;">
+    <br>
+    {% if current_user.recent_searchs %}
+    <h3> Here's the results from your pubmed search on {{ current_user.recent_searchs }}!</h3>
+    <ul id='results-list' style="font-size: 1.5em">
+    {% for value in values %}
+        <li style="margin-top: 20px;">{{ value }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    </div>
+</div>
+<div class="push"></div>
+    
+{% endblock %}

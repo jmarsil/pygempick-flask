@@ -1,0 +1,10 @@
+
+Hey {{ user.username }},
+
+Please find the attatched csv file of the recorded gold particle positions. 
+
+There were {{ Task.query.filter_by(name=name, user=self, complete=False).first().description }}.
+
+Thanks for using pyGemPick!
+
+The Chakrab Team!!

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block app_content %}
+    
+    <h1>Here are your Most Recently processed images, {{ current_user.username }}:</h1>
+    {% if form %}
+    {{ wtf.quick_form(form) }}
+    {% endif %}
+    
+    <div class="container">
+    <h2>Below is a list of the completed & processed tasks.</h2>
+    <p> Choose your processed files to download it. The zip contains an archive of compressed,
+    images with detected particles drawn in green. The CSV contains a list of the (x,y) 
+    coordinates of detected gold particles for each image. (Eg. First two columns correspond to x and y of the <strong>FIRST</strong> processed image.) </p>
+    
+        {% if current_user.is_authenticated %}
+            {% if tasks %}
+            <ol>
+            {% for i in length %}
+            <li>
+            <h4><strong>Results: {{ tasks[i].description }}</strong></h4>
+            <p><span id="{{ tasks[i].id }}-progress">{{ tasks[i].get_progress() }}</span>% of the images were processed on {{ parameters[i].timestamp }}. </p>
+            <p><strong>Task Comments:</strong> {{ parameters[i].comments }} </p>
+             <table class="table table-sm">
+                  <thead>
+                        <tr>
+                          <th scope="col">Paarameter</th>
+                          <th scope="col">Value</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                      <th scope="row">
+                      <a href="#" data-toggle="tooltip" data-placement="left" title="This is the Anchor value for the High Contrast Laplace filter.">HCLAP Anchor</a>
+                      </th>
+                      <td>{{ parameters[i].anchor1 }}</td>
+                      </tr>
+                      <tr>
+                      <th scope="row"><a href="#" data-toggle="tooltip" data-placement="left" title="This is the Anchor value for the High Contrast Laplace of Gaussian filter.">HLOG Anchor</a></th>
+                      <td>{{ parameters[i].anchor2 }}</td>
+                      </tr>
+                      <tr>
+                      <th scope="row"><a href="#" data-toggle="tooltip" data-placement="left" title="This is the minimum area value (px**2) simple blob detector used to filter non-gold particles. E.g. setting minArea  = 100 will filter out all the blobs that have less then 100 pixels.">minAREA</a></th>
+                      <td>{{ parameters[i].minArea }}</td>
+                      </tr>
+                      <tr>
+                      <th scope="row"><a href="#" data-toggle="tooltip" data-placement="left" title="This is the minimum circularity parameter. This just measures how close to a circle the blob is. E.g. a regular hexagon has higher circularity than say a square.">minCIRC</a></th>
+                      <td>{{ parameters[i].minCirc }}</td>
+                      </tr>
+                      <tr>
+                      <th scope="row"><a href="#" data-toggle="tooltip" data-placement="left" title="This is the minimum convexity rario that measures how closed a detected gold particle is. (ie. is there a large space in the convex hall of the detected particle?) ">minCONC</a></th>
+                      <td>{{ parameters[i].minConc }}</td>
+                      </tr>
+                      <tr>
+                      <th scope="row"><a href="#" data-toggle="tooltip" data-placement="left" title="This is the minimum Inertial Ratio. All you have to know is that this measures how elongated a shape is. E.g. for a circle, this value is 1, for an ellipse it is between 0 and 1, and for a line it is 0. ">minIner</a></th>
+                      <td>{{ parameters[i].minIner }}</td>
+                      </tr>
+                 </tbody>
+             </table>
+                  
+             <div class="btn-group">
+                  <button type="button" class="btn btn-primary">Download Processed Image Data</button>
+                  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu" role="menu">
+                  <li><a type="submit" name="download" value="{{ tasks[i].csv_sum }}" href="{{ url_for('main.complete_download', filename=tasks[i].csv_sum) }}">Task Summary</a></li>
+                    <li><a type="submit" name="download" value="{{ tasks[i].csv_key }}" href="{{ url_for('main.complete_download', filename=tasks[i].csv_key) }}">CSV (x,y)</a></li>
+                    <li><a type="submit" name="download" value="{{ tasks[i].zip_name }}" href="{{ url_for('main.complete_download', filename=tasks[i].zip_name)}}">ZIP </a></li>
+                  </ul>
+            </div>
+            </li>
+            {% endfor %}
+            </ol>
+            {% endif %}
+        {% endif %}
+    </div>
+    <div class="push"></div>
+    
+{% endblock %}

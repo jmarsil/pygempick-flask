@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+
+    <h1> Step 1: Upload Zip Folder </h1>
+        <div class="row">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
+        <!-- Make sure you add functionality to use previously uploded files
+        -- for online application put a shelf life for uploaded files. (7 Days)
+        -- Then download won't be avaliable for download. -->
+    </div>
+    
+{% endblock %}
+
+
