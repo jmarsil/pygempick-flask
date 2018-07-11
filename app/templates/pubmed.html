@@ -16,12 +16,20 @@
     <div class="row" style="text-align: left; float: center;">
     <br>
     {% if current_user.recent_searchs %}
-    <h3> Here's the results from your pubmed search on {{ current_user.recent_searchs }}!</h3>
+    <h1> Here's the results from your pubmed search on <strong>{{ current_user.recent_searchs }}</strong>!</h1>
+    <div class="container">
     <ul id='results-list' style="font-size: 1.5em">
-    {% for value in values %}
-        <li style="margin-top: 20px;">{{ value }}</li>
+    {% for i in lengths %}
+        <li style="margin-top: 20px;">{{ values[i] }} 
+        {% if abstracts %}
+        <p><a href="#abstract_{{ i }}" rel="abstract_{{ i }}" >Click here for abstract!</a></p>
+        <br/><div id="abstract_{{ i }}" class="hidden">{{ abstracts[i] }}</div>
+        {% endif %}
+        </li>
+        
     {% endfor %}
     </ul>
+    </div>
     {% endif %}
     </div>
 </div>

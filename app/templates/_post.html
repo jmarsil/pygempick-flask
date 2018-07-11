@@ -10,13 +10,11 @@
                     {{ post.author.username }}
                 </a>
                 said {{ moment(post.timestamp).fromNow() }}:
-                <br>
-                {{ post.body }}
-                
-                <br>
-                
+                <br/>
+                <p class="user-post">{{ post.body }}</p>
+                <br/>
                 {% if post.image_url %}
-                  <img src="/static/img/{{post.image_filename}}" style="width:600px;height:450px;">
+                  <img class="user-img" src="/static/img/{{post.image_filename}}" style="width:50%;height:50%;">
                 {% endif %}
                 
             </td>

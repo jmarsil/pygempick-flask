@@ -5,9 +5,11 @@ Created on Tue May 29 09:58:58 2018
 
 @author: joseph
 """
+from flask import render_template
 import sys
 import os
 from app import create_app
+from app.email import send_email
 #from app.email import send_email
 import pygempick.core as py
 from rq import get_current_job
@@ -18,7 +20,6 @@ import pandas as pd
 import cv2
 import zipfile
 import glob
-import csv
 #import time
 
 from app.models import Task, User
@@ -185,11 +186,24 @@ def picking_main(user_id):
         summary.to_csv('app/static/to-download/{}_summary_{}-{}.csv'.format(user, j,i),index=False)
         data.to_csv('app/static/to-download/{}_keypoint_centers_{}-{}.csv'.format(user,j,i),index=False)
         
-        
-            
         myzip.close()
+        
+        _delete_file(archive_name)
        
         _set_task_descriptor(user, i,j,dup, num_zips)
+        
+# Learn how to implement this feature....!!!        
+#        with open('app/static/to-download/{}_summary_{}-{}.csv'.format(user, j,i)) as csvDataFile:
+#        
+#            send_email('[Microblog] Your blog posts',
+#                sender=app.config['ADMINS'][0], recipients=[user.email],
+#                text_body=render_template('email/export_posts.txt', user=user),
+#                html_body=render_template('email/export_posts.html', user=user),
+#                attachments=[('summary.csv', 'text/csv',csvDataFile)],
+#                sync=True)
+#        
+#        csvDataFile.close()
+        
 #        responsecsv = make_response(data.to_csv())
 #        responsezip = make_response(myzip)
 #        
@@ -237,6 +251,12 @@ def picking_main(user_id):
     # allow users to choose from images they've previously uploaded!
     
 #create wrapper function dedicated to update the task/progress being performed in the background!
+def _delete_file(archive_name):
+    
+    file_path = 'app/static/arch/{}'.format(archive_name)
+    os.remove(file_path)
+    
+    print('{} Successfuly Deleted'.format(archive_name))
 
 def _set_task_progress(progress):
     
@@ -307,12 +327,22 @@ def article_search(user_id):
         papers = fetch_details(id_list)
         
         paper_names = []
+        paper_abstracts = []
+        
         for i, paper in enumerate(papers['PubmedArticle']): 
             paper_names.append("%d) %s" % (i+1, paper['MedlineCitation']['Article']['ArticleTitle']))
+            paper_abstracts.append("%d) %s" % (i+1, paper['MedlineCitation']['Article']['Abstract']['AbstractText'][0]))
         
         results = open('app/static/to-download/pubmed_queries.txt', 'w')
         for item in paper_names:
             results.write("%s\n" % item)
+        
+        results.close()
+        
+        results2 = open('app/static/to-download/pubmed_abstracts.txt', 'w')
+        for item in paper_abstracts:
+            results2.write("%s\n" % item)
+        results2.close()
         
     except:
         app.logger.error('Unhandled exception', exc_info=sys.exc_info())

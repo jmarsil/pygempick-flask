@@ -121,11 +121,6 @@ class User(UserMixin, db.Model):
         choice = zips.order_by(Process.timestamp.desc()).first()
         return choice.archive_filename
     
-    def get_reset_password_token(self, expires_in=600):
-        return jwt.encode(
-                {'reset_password': self.id, 'exp': time() + expires_in},
-                current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
-    
     def is_number(s):
         
         try:
@@ -156,6 +151,11 @@ class User(UserMixin, db.Model):
         db.session.add(n)
         return n
     
+    def get_reset_password_token(self, expires_in=600):
+        return jwt.encode(
+                {'reset_password': self.id, 'exp': time() + expires_in},
+                current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+        
     @staticmethod
     def verify_reset_password_token(token):
         try:

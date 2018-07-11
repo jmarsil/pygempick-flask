@@ -25,15 +25,23 @@ def index():
     if form.validate_on_submit():
         filename = photos.save(request.files['photo'])
         url = photos.url(filename)
-        post = Post(body=form.post.data, author=current_user, image_filename=filename, image_url=url )
+        
+        post = Post(body=form.post.data, author=current_user, image_filename=filename,\
+                    image_url=url )
+        
         db.session.add(post)
         db.session.commit()
         flash('Your post is now live!')
         return redirect(url_for('main.index'))
-   
-    posts = current_user.all_posts().all()
-    parameters = current_user.own_params()
     
+    page = request.args.get('page', 1, type=int)
+    posts = current_user.all_posts().paginate(page, current_app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('main.index', page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('main.index', page=posts.prev_num) \
+        if posts.has_prev else None
+    
+    parameters = current_user.own_params()
     tasks = Task.query.all()
     my_tasks = current_user.get_completed_tasks()
         
@@ -45,7 +53,9 @@ def index():
         for task in tasks:
             imgs_count += np.float(task.img_count)
             
-    return render_template('index.html', title='Home Page', form=form, posts=posts, imgs_count=imgs_count, my_tasks=my_tasks, params=parameters, length=range(len(my_tasks[-2:])))
+    return render_template('index.html', title='Home Page', form=form, posts=posts.items,\
+                           imgs_count=imgs_count, my_tasks=my_tasks, params=parameters,\
+                           length=range(len(my_tasks[-2:])), next_url=next_url, prev_url=prev_url)
 
 @bp.route('/pygempick/download-files', methods=['GET', 'POST'])
 @login_required
@@ -58,13 +68,15 @@ def download():
     if len(tasks)==0:
         return redirect(url_for('main.pygempick'))
     
-    return render_template('download.html', title='Download Picked Image Data', tasks=tasks, parameters=parameters, length=range(len(tasks)))
+    return render_template('download.html', title='Download Picked Image Data',\
+                           tasks=tasks, parameters=parameters, length=range(len(tasks)))
 
 @bp.route('/pygempick/download-files/<filename>', methods=['GET', 'POST'])
 @login_required
 def complete_download(filename):
     
-    return send_from_directory(directory='static/to-download/', filename=filename, as_attachment=True)
+    return send_from_directory(directory='static/to-download/', filename=filename,\
+                               as_attachment=True)
 
 '''
 
@@ -91,9 +103,11 @@ def pubmed_search():
     
     with open("app/static/to-download/pubmed_queries.txt") as f:
             values = f.readlines()
-            print(values)
     
-    return render_template('pubmed.html', title='Pubmed Search', values=values, form=form)
+    with open("app/static/to-download/pubmed_abstracts.txt") as r:
+            abstracts = r.readlines()
+    
+    return render_template('pubmed.html', title='Pubmed Search', values=values, abstracts=abstracts, lengths=range(len(values)), form=form)
 
 @bp.route('/explore-pubmed/results?query=<query>', methods=['GET', 'POST'])
 @login_required
@@ -144,24 +158,7 @@ def pygempick():
         
     return render_template('pygempick.html', title='pyGemPick 1.1.3', form=form )
 
-
-'''
-@app.route('/pygempick/single-picker/', methods=['GET','POST'])
-@login_required
-def single_picker():
-    
-    form = SingleFilterParams()
-    if form.validate_on_submit():
-        params = Paramas(author=current_user, anchor1=form.anchor1, anchor2=form.anchor1, 
-                            minArea=form.minArea, minCirc=form.minCirc, 
-                            minConc=form.minConc, minIner=form.minIner)
-        db.session.add(params)
-        db.session.commit()
-        return redirect(url_for('index'))
-    
-    return render_template('single_pick.html', title='pyGemPick - Single <method> Picker', form=form )
-'''
-        
+   
 @bp.route('/pygempick/double-picker/', methods=['GET','POST'])
 @login_required
 def double_picker():
@@ -171,9 +168,10 @@ def double_picker():
         
         #Check parameters - make sure they're all numbers. 
         
-        params = Paramas(author=current_user, anchor1=float(form.anchor1.data), anchor2=float(form.anchor2.data), 
-                            minArea=float(form.minArea.data), minCirc=float(form.minCirc.data), 
-                            minConc=float(form.minConc.data), minIner=float(form.minIner.data),  comments=form.comments.data)
+        params = Paramas(author=current_user, anchor1=float(form.anchor1.data), \
+                         anchor2=float(form.anchor2.data), minArea=float(form.minArea.data),\
+                         minCirc=float(form.minCirc.data), minConc=float(form.minConc.data),\
+                         minIner=float(form.minIner.data),  comments=form.comments.data)
         
         db.session.add(params)
         db.session.commit()
@@ -184,6 +182,19 @@ def double_picker():
             return redirect(url_for('main.picking_main'))
     
     return render_template('single_pick.html', title='pyGemPick - Dual Picker', form=form )
+
+@bp.route('/pygempick/double_picker/picking_main')
+@login_required
+def picking_main():
+    
+    if current_user.get_task_in_progress('picking_main'):
+        flash('A particle picking operation is already underway!')
+    
+    else:
+        current_user.launch_task('picking_main', 'Particle Picking Activated...')
+        db.session.commit()
+    
+    return redirect(url_for('main.pygempick', username=current_user.username))
 
 @bp.route('/user/<username>') #has a dynamic component in it 
 @login_required
@@ -238,18 +249,6 @@ def unfollow(username):
     flash('You are not following {}.'.format(username))
     return redirect(url_for('main.user', username=username))
 
-@bp.route('/pygempick/double_picker/picking_main')
-@login_required
-def picking_main():
-    
-    if current_user.get_task_in_progress('picking_main'):
-        flash('A particle picking operation is already underway!')
-    
-    else:
-        current_user.launch_task('picking_main', 'Particle Picking Activated...')
-        db.session.commit()
-    
-    return redirect(url_for('main.pygempick', username=current_user.username))
 
 @bp.route('/notifications')
 @login_required

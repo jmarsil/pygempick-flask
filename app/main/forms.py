@@ -35,7 +35,7 @@ class EditProfileForm(FlaskForm):
 
 class PostForm(FlaskForm):
     post = TextAreaField('Say something', validators=[
-            DataRequired(), Length(min=1, max=140)])
+            DataRequired(), Length(min=1, max=360)])
     photo = FileField('Upload an Image', validators=[FileRequired(), FileAllowed(photos, 'Images only!')])
     submit = SubmitField('Submit')
 
