@@ -1,3 +1,3 @@
-web: flask db upgrade; flask translate compile; gunicorn pypick:app
+web: flask db upgrade; gunicorn pypick:app
 worker: rq worker pypick-tasks
 
