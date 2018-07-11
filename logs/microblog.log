@@ -49,3 +49,7 @@ FileNotFoundError: [Errno 2] No such file or directory: 'app/static/to-download/
 2018-07-11 15:01:44,001 INFO: pyGemPick web app starting up! [in /home/joseph/pygempick-flask/app/__init__.py:119]
 2018-07-11 15:02:25,165 INFO: pyGemPick web app starting up! [in ./app/__init__.py:119]
 2018-07-11 15:34:06,798 INFO: pyGemPick web app starting up! [in /home/joseph/pygempick-flask/app/__init__.py:119]
+2018-07-11 16:11:12,707 INFO: pyGemPick web app starting up! [in /home/joseph/pygempick-flask/app/__init__.py:119]
+2018-07-11 16:12:15,428 INFO: pyGemPick web app starting up! [in /home/joseph/pygempick-flask/app/__init__.py:119]
+2018-07-11 16:12:19,201 INFO: pyGemPick web app starting up! [in /home/joseph/pygempick-flask/app/__init__.py:119]
+2018-07-11 16:13:32,192 INFO: pyGemPick web app starting up! [in ./app/__init__.py:119]
