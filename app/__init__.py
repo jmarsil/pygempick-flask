@@ -67,7 +67,7 @@ def create_app(config_class=Config):
     #configure_uploads(app, files)
     
     app.redis = Redis.from_url(app.config['REDIS_URL'])
-    app.task_queue = rq.Queue('microblog-tasks', connection=app.redis)
+    app.task_queue = rq.Queue('pypick-tasks', connection=app.redis)
     
     db.init_app(app)
     migrate.init_app(app, db)
@@ -113,7 +113,7 @@ def create_app(config_class=Config):
         app.logger.addHandler(file_handler)
         
         app.logger.setLevel(logging.INFO)
-        app.logger.info('Microblog startup')
+        app.logger.info('pyGemPick web app starting up!')
     
     return app
 
