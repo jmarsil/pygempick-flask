@@ -1,7 +1,6 @@
 alembic==0.9.10
 arrow==0.12.1
 asn1crypto==0.24.0
-Babel==2.6.0
 biopython==1.72
 blinker==1.4
 certifi==2018.4.16
@@ -13,7 +12,6 @@ cycler==0.10.0
 Cython==0.28.4
 dominate==2.3.1
 Flask==1.0.2
-Flask-Babel==0.11.2
 Flask-Bootstrap==3.3.7.1
 Flask-Login==0.4.1
 Flask-Mail==0.9.1
@@ -54,7 +52,6 @@ pytz==2018.5
 redis==2.10.6
 requests==2.11.1
 rq==0.11.0
-rq-dashboard==0.3.12
 six==1.11.0
 SQLAlchemy==1.2.9
 tlslite==0.4.9

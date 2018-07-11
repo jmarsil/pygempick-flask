@@ -6,7 +6,6 @@ from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_mail import Mail
-from flask_babel import Babel
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 from flask_uploads import UploadSet, ARCHIVES, configure_uploads, IMAGES
