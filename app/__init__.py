@@ -29,7 +29,6 @@ Home will show the completeness of laboratory tests. w/ downloadable zip folders
 of all output data for that test...
 
 '''
-
 bootstrap = Bootstrap() #Bootstrap uses three level hiearchy...
 login = LoginManager()
 login.login_view = 'auth.login' #function or endpoint name for login view
@@ -84,7 +83,7 @@ def create_app(config_class=Config):
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
 
-    if not app.debug and not app.testing:
+    if not app.debug:
         
         if app.config['MAIL_SERVER']:
             auth = None
@@ -96,7 +95,7 @@ def create_app(config_class=Config):
             mail_handler = SMTPHandler(
                     mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
                     fromaddr='no-reply@' + app.config['MAIL_SERVER'],
-                    toaddrs=app.config['ADMINS'], subject='pSyGemPick Failure',
+                    toaddrs=app.config['ADMINS'], subject='Microblog Failure',
                     credentials=auth, secure=secure)
             mail_handler.setLevel(logging.ERROR)
             app.logger.addHandler(mail_handler)
@@ -104,7 +103,7 @@ def create_app(config_class=Config):
         if not os.path.exists('logs'):
             os.mkdir('logs')
         
-        file_handler = RotatingFileHandler('logs/pypick.log', maxBytes=10240,
+        file_handler = RotatingFileHandler('logs/microblog.log', maxBytes=10240,
                                            backupCount=10)
         file_handler.setFormatter(logging.Formatter(
                 '%(asctime)s %(levelname)s: %(message)s [in % (pathname)s:%(lineno)d]'))
@@ -113,24 +112,6 @@ def create_app(config_class=Config):
         
         app.logger.setLevel(logging.INFO)
         app.logger.info('pyGemPick web app starting up!')
-        
-        '''if app.config['LOG_TO_STDOUT']:
-            stream_handler = logging.StreamHandler()
-            stream_handler.setLevel(logging.INFO)
-            app.logger.addHandler(stream_handler)
-        else:
-            if not os.path.exists('logs'):
-                os.mkdir('logs')
-            file_handler = RotatingFileHandler('logs/pypick.log',
-                                               maxBytes=10240, backupCount=10)
-            file_handler.setFormatter(logging.Formatter(
-                '%(asctime)s %(levelname)s: %(message)s '
-                '[in %(pathname)s:%(lineno)d]'))
-            file_handler.setLevel(logging.INFO)
-            app.logger.addHandler(file_handler)
-
-        app.logger.setLevel(logging.INFO)
-        app.logger.info('Microblog startup')'''
     
     return app
 
