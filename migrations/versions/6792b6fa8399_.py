@@ -1,8 +1,8 @@
-"""user
+"""empty message
 
-Revision ID: c82af377f2d6
+Revision ID: 6792b6fa8399
 Revises: 
-Create Date: 2018-07-11 13:53:19.798991
+Create Date: 2018-07-12 19:19:56.811264
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c82af377f2d6'
+revision = '6792b6fa8399'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -38,7 +38,7 @@ def upgrade():
     )
     op.create_table('notification',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('name', sa.String(length=128), nullable=True),
+    sa.Column('name', sa.String(length=140), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('timestamp', sa.Float(), nullable=True),
     sa.Column('payload_json', sa.Text(), nullable=True),
@@ -51,13 +51,13 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('anchor1', sa.String(), nullable=True),
-    sa.Column('anchor2', sa.String(), nullable=True),
-    sa.Column('minArea', sa.String(), nullable=True),
-    sa.Column('minCirc', sa.String(), nullable=True),
-    sa.Column('minConc', sa.String(), nullable=True),
-    sa.Column('minIner', sa.String(), nullable=True),
-    sa.Column('comments', sa.String(), nullable=True),
+    sa.Column('anchor1', sa.String(length=4), nullable=True),
+    sa.Column('anchor2', sa.String(length=4), nullable=True),
+    sa.Column('minArea', sa.String(length=4), nullable=True),
+    sa.Column('minCirc', sa.String(length=4), nullable=True),
+    sa.Column('minConc', sa.String(length=4), nullable=True),
+    sa.Column('minIner', sa.String(length=4), nullable=True),
+    sa.Column('comments', sa.String(length=140), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -67,8 +67,8 @@ def upgrade():
     sa.Column('body', sa.String(length=140), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('image_filename', sa.String(), nullable=True),
-    sa.Column('image_url', sa.String(), nullable=True),
+    sa.Column('image_filename', sa.String(length=140), nullable=True),
+    sa.Column('image_url', sa.String(length=256), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -77,22 +77,22 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('archive_filename', sa.String(), nullable=True),
-    sa.Column('archive_url', sa.String(), nullable=True),
+    sa.Column('archive_filename', sa.String(length=140), nullable=True),
+    sa.Column('archive_url', sa.String(length=140), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_process_timestamp'), 'process', ['timestamp'], unique=False)
     op.create_table('task',
     sa.Column('id', sa.String(length=36), nullable=False),
-    sa.Column('name', sa.String(length=128), nullable=True),
-    sa.Column('description', sa.String(length=128), nullable=True),
+    sa.Column('name', sa.String(length=140), nullable=True),
+    sa.Column('description', sa.String(length=140), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('complete', sa.Boolean(), nullable=True),
-    sa.Column('csv_key', sa.String(), nullable=True),
-    sa.Column('csv_sum', sa.String(), nullable=True),
-    sa.Column('zip_name', sa.String(), nullable=True),
-    sa.Column('img_count', sa.String(), nullable=True),
+    sa.Column('csv_key', sa.String(length=254), nullable=True),
+    sa.Column('csv_sum', sa.String(length=254), nullable=True),
+    sa.Column('zip_name', sa.String(length=254), nullable=True),
+    sa.Column('img_count', sa.String(length=140), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
