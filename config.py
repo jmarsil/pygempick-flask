@@ -14,9 +14,9 @@ class Config(object):
     
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://username:password@localhost/pypick' or \
-    os.environ.get('DATABASE_URL') or \
-    'sqlite:///' + os.path.join(basedir, 'app.db')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+    'sqlite:///' + os.path.join(basedir, 'app.db') or \
+    'mysql+pymysql://jmarsil:Revl*2018@localhost/pypick'
     
     #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@localhost/db_name'
     #https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/miguelgrinberg/microblog/tree/v0.22/deployment
