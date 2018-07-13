@@ -15,9 +15,9 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-    'sqlite:///' + os.path.join(basedir, 'app.db')
+    'mysql+pymysql://jmarsil:Revl*2018@localhost/pygempick'
     
-    #'mysql+pymysql://jmarsil:Revl*2018@localhost/pypick'
+    #'sqlite:///' + os.path.join(basedir, 'app.db')
     #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@localhost/db_name'
     #https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/miguelgrinberg/microblog/tree/v0.22/deployment
     #https://stackoverflow.com/questions/27766794/switching-from-sqlite-to-mysql-with-flask-sqlalchemy
