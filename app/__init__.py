@@ -1,7 +1,8 @@
-from flask import Flask, request
+from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+#from flask_script import Manager
+from flask_migrate import Migrate #, MigrateCommand
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
@@ -36,6 +37,7 @@ mail = Mail()
 
 db = SQLAlchemy() ##this object represents the database
 migrate = Migrate() ##this object represents the migration engine
+#manager = Manager()
 moment = Moment()
 
 app= Flask(__name__)
@@ -68,7 +70,14 @@ def create_app(config_class=Config):
     app.task_queue = rq.Queue('pypick-tasks', connection=app.redis)
     
     db.init_app(app)
+    #db.create_all() 
+    
+    ###new edits
     migrate.init_app(app, db)
+    #manager.init_app(app)
+    #manager.add_command('db', MigrateCommand)
+    ###end new edits
+    
     login.init_app(app)
     mail.init_app(app)
     bootstrap.init_app(app)
