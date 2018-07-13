@@ -70,7 +70,7 @@ def create_app(config_class=Config):
     app.task_queue = rq.Queue('pypick-tasks', connection=app.redis)
     
     db.init_app(app)
-    db.create_all() 
+    #db.create_all() 
     
     ###new edits
     migrate.init_app(app, db)
