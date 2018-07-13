@@ -101,10 +101,10 @@ def pubmed_search():
         query = request.form['search']
         return redirect(url_for('main.pubmed_results', query=query, self=current_user.username))
     
-    with open("app/static/to-download/pubmed_queries.txt") as f:
+    with open("static/to-download/pubmed_queries.txt") as f:
             values = f.readlines()
     
-    with open("app/static/to-download/pubmed_abstracts.txt") as r:
+    with open("static/to-download/pubmed_abstracts.txt") as r:
             abstracts = r.readlines()
     
     return render_template('pubmed.html', title='Pubmed Search', values=values, abstracts=abstracts, lengths=range(len(values)), form=form)

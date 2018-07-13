@@ -110,13 +110,13 @@ def picking_main(user_id):
         minIner = np.float(PARAM.minIner)/100
         comments = PARAM.comments
         
-        zips = glob.glob("app/static/to-download/*.zip")
+        zips = glob.glob("static/to-download/*.zip")
         num_zips = len(zips)
         
-        myzip = zipfile.ZipFile("app/static/to-download/myzip_{}.zip".format(num_zips), "w")
+        myzip = zipfile.ZipFile("static/to-download/myzip_{}.zip".format(num_zips), "w")
         #read the image file from most rescent archive location
         
-        with zipfile.ZipFile('app/static/arch/{}'.format(archive_name)) as images: 
+        with zipfile.ZipFile('static/arch/{}'.format(archive_name)) as images: 
         #read the archive images as namelist
             img_names = images.namelist()
         
@@ -183,8 +183,8 @@ def picking_main(user_id):
         print(comments)
         img_number.append(comments)
         summary = pd.DataFrame({'Gold Count':part_count,'Image Number':img_number})
-        summary.to_csv('app/static/to-download/{}_summary_{}-{}.csv'.format(user, j,i),index=False)
-        data.to_csv('app/static/to-download/{}_keypoint_centers_{}-{}.csv'.format(user,j,i),index=False)
+        summary.to_csv('static/to-download/{}_summary_{}-{}.csv'.format(user, j,i),index=False)
+        data.to_csv('static/to-download/{}_keypoint_centers_{}-{}.csv'.format(user,j,i),index=False)
         
         myzip.close()
         
@@ -253,7 +253,7 @@ def picking_main(user_id):
 #create wrapper function dedicated to update the task/progress being performed in the background!
 def _delete_file(archive_name):
     
-    file_path = 'app/static/arch/{}'.format(archive_name)
+    file_path = 'static/arch/{}'.format(archive_name)
     os.remove(file_path)
     
     print('{} Successfuly Deleted'.format(archive_name))
@@ -333,13 +333,14 @@ def article_search(user_id):
             paper_names.append("%d) %s" % (i+1, paper['MedlineCitation']['Article']['ArticleTitle']))
             paper_abstracts.append("%d) %s" % (i+1, paper['MedlineCitation']['Article']['Abstract']['AbstractText'][0]))
         
-        results = open('app/static/to-download/pubmed_queries.txt', 'w')
+        file = os.path.join('static/to-download/', 'pubmed_queries.txt')
+        results = open(file, 'w')
         for item in paper_names:
             results.write("%s\n" % item)
-        
         results.close()
         
-        results2 = open('app/static/to-download/pubmed_abstracts.txt', 'w')
+        file = os.path.join('static/to-download/','pubmed_abstracts.txt')
+        results2 = open(file, 'w')
         for item in paper_abstracts:
             results2.write("%s\n" % item)
         results2.close()

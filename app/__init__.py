@@ -50,20 +50,20 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
     
-    app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/img/'
+    app.config['UPLOADED_PHOTOS_DEST'] = 'static/img/'
     configure_uploads(app, photos)
     
-    app.config['UPLOADED_ARCHIVES_DEST'] = 'app/static/arch/'
+    app.config['UPLOADED_ARCHIVES_DEST'] = 'static/arch/'
     configure_uploads(app, archives)
     
     # create the folders when setting up your app
-    app.config['IMG_PICKED'] = 'app/static/picked/'
+    app.config['IMG_PICKED'] = 'static/picked/'
      
     # create the folders when setting up your app
-    app.config['TO_DOWNLOAD'] = 'app/static/to-download/'
+    app.config['TO_DOWNLOAD'] = 'static/to-download/'
     
 
-    #app.config['UPLOADED_FILES_DEST'] = 'app/static/files/<username>'
+    #app.config['UPLOADED_FILES_DEST'] = 'static/files/<username>'
     #configure_uploads(app, files)
     
     app.redis = Redis.from_url(app.config['REDIS_URL'])
