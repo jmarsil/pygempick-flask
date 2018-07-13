@@ -110,13 +110,17 @@ def picking_main(user_id):
         minIner = np.float(PARAM.minIner)/100
         comments = PARAM.comments
         
-        zips = glob.glob("static/to-download/*.zip")
+        file_path3 = os.path.join('static/to-download/','*.zip')
+        zips = glob.glob(file_path3)
         num_zips = len(zips)
         
-        myzip = zipfile.ZipFile("static/to-download/myzip_{}.zip".format(num_zips), "w")
-        #read the image file from most rescent archive location
+        #read the amount of .zip archives saved...
+        file_path2 = os.path.join('static/to-download/','myzip_{}.zip'.format(num_zips))
+        myzip = zipfile.ZipFile(file_path2, "w")
         
-        with zipfile.ZipFile('static/arch/{}'.format(archive_name)) as images: 
+        #read the image file from most rescent archive location
+        file_path1 = os.path.join('static/arch/','{}'.format(archive_name))
+        with zipfile.ZipFile(file_path1) as images: 
         #read the archive images as namelist
             img_names = images.namelist()
         
@@ -183,8 +187,9 @@ def picking_main(user_id):
         print(comments)
         img_number.append(comments)
         summary = pd.DataFrame({'Gold Count':part_count,'Image Number':img_number})
-        summary.to_csv('static/to-download/{}_summary_{}-{}.csv'.format(user, j,i),index=False)
-        data.to_csv('static/to-download/{}_keypoint_centers_{}-{}.csv'.format(user,j,i),index=False)
+        file_path = os.path.join('static/to-download/','{}_summary_{}-{}.csv'.format(user, j,i))
+        summary.to_csv(file_path ,index=False)
+        data.to_csv(file_path ,index=False)
         
         myzip.close()
         
@@ -253,7 +258,7 @@ def picking_main(user_id):
 #create wrapper function dedicated to update the task/progress being performed in the background!
 def _delete_file(archive_name):
     
-    file_path = 'static/arch/{}'.format(archive_name)
+    file_path = os.path.join('static/arch/','{}'.format(archive_name))
     os.remove(file_path)
     
     print('{} Successfuly Deleted'.format(archive_name))
