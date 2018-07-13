@@ -15,7 +15,7 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-    'mysql+pymysql://jmarsil:Revl*2018@localhost/chakrab'
+    'mysql+pymysql://jmarsil:Revl*2018@localhost/pypick'
     #'sqlite:///' + os.path.join(basedir, 'app.db')
     
     # or \
