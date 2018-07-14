@@ -75,7 +75,8 @@ def download():
 @login_required
 def complete_download(filename):
     
-    return send_from_directory(directory='static/to-download/', filename=filename,\
+    file = os.path.join('static/', 'to-download/')
+    return send_from_directory(directory=file, filename=filename,\
                                as_attachment=True)
 
 '''
