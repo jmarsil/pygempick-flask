@@ -188,6 +188,7 @@ class Process(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     archive_filename = db.Column(db.String(140), default=None, nullable=True)
     archive_url = db.Column(db.String(140), default=None, nullable=True)
+    img_state = db.Column(db.Boolean, unique=False, default=True)
     
     def __repr__(self):
         return '<{} Sized Zip File!>'.format(os.stat(self.archive_url).st_size)
