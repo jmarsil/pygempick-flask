@@ -8,7 +8,7 @@ from app.main import bp
 from Bio import Entrez
 import time
 import numpy as np
-
+import os
 
 @bp.before_request
 def before_request():
@@ -75,8 +75,10 @@ def download():
 @login_required
 def complete_download(filename):
     
-    file = os.path.join('static/', 'to-download/')
-    return send_from_directory(directory=file, filename=filename,\
+    root_dir = os.path.dirname(os.getcwd())
+    directory= os.path.join(root_dir,'pygempick-flask','static','to-download')
+    print(root_dir)
+    return send_from_directory(directory=directory, filename=filename,\
                                as_attachment=True)
 
 '''
