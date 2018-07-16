@@ -97,8 +97,10 @@ def picking_main(user_id):
         
         #need the most recent uploaded archive
         ZIP = user.own_zips().first()
-        
+        #import archive name 
         archive_name = ZIP.archive_filename
+        #import img_state (compressed or not!)
+        img_state = ZIP.img_state
         #need the most recent recorded parameters of user!
         PARAM = user.own_params().first()
         
@@ -133,12 +135,13 @@ def picking_main(user_id):
                 
                 cv_image = np.array(imgdata) 
                 cv_image = cv_image[:, :, ::-1].copy() 
-                
-                r = 1018/cv_image.shape[1] ##correct aspect ratio of image to prevent distortion
-                dim = (1018, int(cv_image.shape[0]*r))
-    
-                gray_img = cv2.resize(cv_image, dim, interpolation = cv2.INTER_AREA)
-    
+                #False = NOT compressed (images in .tiff format)
+                if img_state == False:
+                    r = 1018/cv_image.shape[1] ##correct aspect ratio of image to prevent distortion
+                    dim = (1018, int(cv_image.shape[0]*r))
+                    gray_img = cv2.resize(cv_image, dim, interpolation = cv2.INTER_AREA)
+                else: 
+                    gray_img=cv_image
                 #gray_img = cv2.cvtColor(resized_img, cv2.COLOR_RGB2GRAY)
                 ## orig_img = cv2.imread(image) ##reads specific test file image     
                 #gray_img = py.compress(imgdata) #use pygempick to compress image...
