@@ -47,7 +47,7 @@ class PubmedForm(FlaskForm):
 class ZipForm(FlaskForm):
     
     archive = FileField('Upload an Zip Folder with TEM Images!', validators=[FileRequired(), FileAllowed(archives, 'Archives only!')])
-    choice1 = BooleanField('Use Most Rescent Upload.')
+    choice1 = BooleanField('Previously Compressed (jpg)?')
     submit = SubmitField('Next Step...')        
     
 class FilterParams(FlaskForm):
