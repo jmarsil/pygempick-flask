@@ -135,7 +135,8 @@ def pygempick():
     if form.validate_on_submit():
         filename = archives.save(request.files['archive'])
         url = archives.url(filename)
-        Zip = Process(author=current_user, archive_filename=filename, archive_url=url )
+        Zip = Process(author=current_user, archive_filename=filename, archive_url=url,
+                      img_state=form.choice1.data)
         db.session.add(Zip)
         db.session.commit()
         
