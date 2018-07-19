@@ -267,7 +267,9 @@
     .unhidden {
         display: block;
     }
-
+    .user-img {
+        width: 200px;
+    }
   </style>
 {% endblock %}
 
@@ -372,7 +374,7 @@
     <!-- Footer Elements -->
 
     <!-- Copyright -->
-    <div class="footer-copyright text-center py-3">&copy; Copyright 2018 by <a href="#">Chakrab Lab</a>.
+    <div class="footer-copyright text-center py-3">&copy; Copyright 2018 by <a href="http://chakrablab.com" target="_blank">Chakrab Lab</a>.
     </div>
     <!-- Copyright -->
     </div>
@@ -440,12 +442,12 @@
     var header = $('body');
     
     var backgrounds = new Array(
-        'url(/static/picked/blur_6.jpg)'
-      , 'url(/static/picked/blur_7.jpg)'
-      , 'url(/static/picked/blur_8.jpg)'
-      , 'url(/static/picked/blur_9.jpg)'
-      , 'url(/static/picked/blur_10.jpg)'
-      , 'url(/static/picked/blur_11.jpg)'
+        "url('/static/picked/blur_6.jpg')"
+      , "url('/static/picked/blur_7.jpg')"
+      , "url('/static/picked/blur_8.jpg')"
+      , "url('/static/picked/blur_9.jpg')"
+      , "url('/static/picked/blur_10.jpg')"
+      , "url('/static/picked/blur_11.jpg')"
     );
     
     var current = 0;
