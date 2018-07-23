@@ -85,7 +85,7 @@ def complete_download(filename):
 @bp.route('/pygempick/graphing/<filename>', methods=['GET', 'POST'])
 @login_required
 def graph_total(filename):
-    
+    root_dir = os.path.dirname(os.getcwd())
     directory= os.path.join(root_dir,'pygempick-flask','static','to-download')
     data = pd.read_csv('{}/{}'.format(directory,filename),\
                     header=None, skiprows=1,skipfooter=1, engine='python')
