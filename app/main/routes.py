@@ -66,14 +66,14 @@ def index():
 def download():
     
     tasks = current_user.get_completed_tasks()
-    tasks = tasks[::-1]
+    a = list(reversed(tasks))
     parameters = current_user.own_params()
     
     if len(tasks)==0:
         return redirect(url_for('main.pygempick'))
     
     return render_template('download.html', title='Download Picked Image Data',\
-                           tasks=tasks, parameters=parameters, length=range(len(tasks)))
+                           tasks=a, parameters=parameters, length=range(len(tasks)))
 
 @bp.route('/pygempick/download-files/<filename>', methods=['GET', 'POST'])
 @login_required
