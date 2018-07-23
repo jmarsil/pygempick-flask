@@ -65,7 +65,8 @@
                   </button>
                   <ul class="dropdown-menu" role="menu">
                   <li><a type="submit" name="download" value="{{ tasks[i].csv_sum }}" href="{{ url_for('main.complete_download', filename=tasks[i].csv_sum) }}">Task Summary</a></li>
-                    <li><a type="submit" name="download" value="{{ tasks[i].csv_key }}" href="{{ url_for('main.complete_download', filename=tasks[i].csv_key) }}">CSV (x,y)</a></li>
+                    <li><a type="submit" name="download" value="{{ tasks[i].csv_sum }}" href="{{ url_for('main.graph_total', filename=tasks[i].csv_sum) }}">Summary (Graph)</a></li>
+                      <li><a type="submit" name="download" value="{{ tasks[i].csv_key }}" href="{{ url_for('main.complete_download', filename=tasks[i].csv_key) }}">CSV (x,y)</a></li>
                     <li><a type="submit" name="download" value="{{ tasks[i].zip_name }}" href="{{ url_for('main.complete_download', filename=tasks[i].zip_name)}}">ZIP </a></li>
                   </ul>
             </div>
