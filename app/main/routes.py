@@ -11,6 +11,7 @@ import pandas as pd
 from plotly.offline import plot
 import plotly.graph_objs as go
 import jinja2 as j2
+import numpy as np
 import os
 
 @bp.before_request
