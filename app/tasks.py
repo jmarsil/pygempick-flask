@@ -191,8 +191,9 @@ def picking_main(user_id):
         img_number.append(comments)
         summary = pd.DataFrame({'Gold Count':part_count,'Image Number':img_number})
         file_path = os.path.join('static/to-download/','{}_summary_{}-{}.csv'.format(user, j,i))
+        file_path2 = os.path.join('static/to-download/','{}_keypoint_centers_{}-{}.csv'.format(user,j,i))
         summary.to_csv(file_path ,index=False)
-        data.to_csv(file_path ,index=False)
+        data.to_csv(file_path2 ,index=False)
         
         myzip.close()
         
