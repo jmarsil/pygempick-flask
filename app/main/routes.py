@@ -81,6 +81,33 @@ def complete_download(filename):
     return send_from_directory(directory=directory, filename=filename,\
                                as_attachment=True)
 
+@bp.route('/pygempick/graphing/<filename>', methods=['GET', 'POST'])
+@login_required
+def graph_total(filename):
+    
+    directory= os.path.join(root_dir,'pygempick-flask','static','to-download')
+    data = pd.read_csv('{}/{}'.format(directory,filename),\
+                    header=None, skiprows=1,skipfooter=1, engine='python')
+    
+    xdata = data[1].tolist() #image number
+    ydata = data[0].tolist() #gold particle count
+    total = sum(ydata)
+    my_plot_div = plot({
+            "data":[go.Scatter(x=xdata, y=ydata)],
+            "layout": go.Layout( title= 'Total Particle Count',
+                                          hovermode= 'closest',
+                                          xaxis= dict(title= 'Archive Image Number',
+                                                      ticklen= 5,
+                                                      zeroline= False,
+                                                      gridwidth= 2,), 
+                                          yaxis=dict(title= 'Gold Particles Detected',
+                                                     ticklen= 5,
+                                                     gridwidth= 2,),
+                                                     showlegend= False)},
+                        output_type='div')
+                                          
+    return render_template('graphing.html', div_placeholder=j2.Markup(my_plot_div), total=total)
+
 '''
 
 The above two routes - take the completed tasks from the user, and pushes the
