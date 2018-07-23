@@ -1,20 +1,20 @@
-1) Leukocyte- and platelet-rich fibrin: a new graft material in endoscopic repair of spontaneous CSF leaks.
-2) The mechanism of GM-CSF inhibition by human GM-CSF auto-antibodies suggests novel therapeutic opportunities.
-3) Comparing the performance of CA 15-3 CSF to cytology in a cohort of patients with breast cancer leptomeningeal metastasis.
-4) GM-CSF improves the immune response to the diphtheria-component in a multivalent vaccine.
-5) Chronic depressive symptomatology and CSF amyloid beta and tau levels in mild cognitive impairment.
-6) Effect of ABCC2 and ABCG2 Gene Polymorphisms and CSF-to-Serum Albumin Ratio on Ceftriaxone Plasma and Cerebrospinal Fluid Concentrations.
-7) Introduction of Human Flt3-L and GM-CSF into Humanized Mice Enhances the Reconstitution and Maturation of Myeloid Dendritic Cells and the Development of Foxp3<sup>+</sup>CD4<sup>+</sup> T Cells.
-8) Protective Role of Myeloid Cells Expressing a G-CSF Receptor Polymorphism in an Induced Model of Lupus.
-9) Outcome of uncorrected CSF leak and consequent recurrent meningitis in a patient: a case presentation and literature review.
-10) Inorganic phosphorus (Pi) in CSF is a biomarker for SLC20A2-associated idiopathic basal ganglia calcification (IBGC1).
-11) ZO-1 expression is suppressed by GM-CSF via miR-96/ERG in brain microvascular endothelial cells.
-12) Advantages with prophylactic PEG-rhG-CSF versus rhG-CSF in breast cancer patients receiving multiple cycles of myelosuppressive chemotherapy: an open-label, randomized, multicenter phase III study.
-13) Distinct Properties of Human M-CSF and GM-CSF Monocyte-Derived Macrophages to Simulate Pathological Lung Conditions In Vitro: Application to Systemic and Inflammatory Disorders with Pulmonary Involvement.
-14) Variable impact of CSF flow suppression on quantitative 3.0T intracranial vessel wall measurements.
-15) Analysis of various tracts of mastoid air cells related to CSF leak after the anterior transpetrosal approach.
-16) Inhibition of the CSF-1 receptor sensitizes ovarian cancer cells to cisplatin.
-17) When Cognitive Decline and Depression Coexist in the Elderly: CSF Biomarkers Analysis Can Differentiate Alzheimer's Disease from Late-Life Depression.
-18) Heterogeneous effects of M-CSF isoforms on the progression of MLL-AF9 leukemia.
-19) Parathyroid hormone related protein concentration in human serum and CSF correlates with age.
-20) Time trends in utilization of G-CSF prophylaxis and risk of febrile neutropenia in a Medicare population receiving adjuvant chemotherapy for early-stage breast cancer.
+1) Classification of caesarean section and normal vaginal deliveries using foetal heart rate signals and advanced machine learning algorithms.
+2) On the Safety of Machine Learning: Cyber-Physical Systems, Decision Sciences, and Data Products.
+3) A comparison of machine learning and Bayesian modelling for molecular serotyping.
+4) Application of machine learning classification for structural brain MRI in mood disorders: Critical review from a clinical perspective.
+5) Machine Learning Techniques in Clinical Vision Sciences.
+6) Guidelines for Developing and Reporting Machine Learning Predictive Models in Biomedical Research: A Multidisciplinary View.
+7) Computational prediction of multidisciplinary team decision-making for adjuvant breast cancer drug therapies: a machine learning approach.
+8) Machine-Learning Algorithms to Code Public Health Spending Accounts.
+9) Detecting Abnormal Word Utterances in Children With Autism Spectrum Disorders: Machine-Learning-Based Voice Analysis Versus Speech Therapists.
+10) A machine learning-based framework to identify type 2 diabetes through electronic health records.
+11) PCA-based polling strategy in machine learning framework for coronary artery disease risk assessment in intravascular ultrasound: A link between carotid and coronary grayscale plaque morphology.
+12) Machine Learning for Medical Imaging.
+13) Classifying smoking urges via machine learning.
+14) Optimizing a machine learning based glioma grading system using multi-parametric MRI histogram and texture features.
+15) Machine learning: novel bioinformatics approaches for combating antimicrobial resistance.
+16) The impact of machine learning techniques in the study of bipolar disorder: A systematic review.
+17) Machine learning models in breast cancer survival prediction.
+18) From machine learning to deep learning: progress in machine intelligence for rational drug discovery.
+19) Machine Learning Applications to Resting-State Functional MR Imaging Analysis.
+20) Cognitive Machine-Learning Algorithm for Cardiac Imaging: A Pilot Study for Differentiating Constrictive Pericarditis From Restrictive Cardiomyopathy.

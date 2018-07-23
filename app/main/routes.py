@@ -66,7 +66,7 @@ def index():
 def download():
     
     tasks = current_user.get_completed_tasks()
-    a = list(reversed(tasks))
+    a = tasks
     parameters = current_user.own_params()
     
     if len(tasks)==0:
