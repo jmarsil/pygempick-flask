@@ -1,5 +1,4 @@
 from flask import render_template, flash, redirect, url_for, request, current_app, jsonify, send_from_directory
-import app
 from app import db, photos, archives
 from datetime import datetime
 from flask_login import current_user, login_required
@@ -8,7 +7,9 @@ from app.models import User, Post, Paramas, Process, Notification, Task
 from app.main import bp
 from Bio import Entrez
 import time
-import numpy as np
+import pandas as pd
+from plotly.offline import plot
+import plotly.graph_objs as go
 import jinja2 as j2
 import os
 
@@ -86,8 +87,9 @@ def complete_download(filename):
 @bp.route('/pygempick/graphing/<filename>', methods=['GET', 'POST'])
 @login_required
 def graph_total(filename):
-    
-    data = pd.read_csv('{}/{}'.format(app.config['TO_DOWNLOAD'],filename),\
+    root_dir = os.path.dirname(os.getcwd())
+    directory= os.path.join(root_dir,'pygempick-flask','static','to-download')
+    data = pd.read_csv('{}/{}'.format(directory,filename),\
                     header=None, skiprows=1,skipfooter=1, engine='python')
     
     xdata = data[1].tolist() #image number
