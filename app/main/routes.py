@@ -8,6 +8,7 @@ from app.main import bp
 from Bio import Entrez
 import time
 import numpy as np
+import jinja2 as j2
 import os
 
 @bp.before_request
