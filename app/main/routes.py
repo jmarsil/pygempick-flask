@@ -170,23 +170,8 @@ def pygempick():
         db.session.commit()
         
         if request.method == "POST":
-            #is_checked = request.form.get('hclap')
-            #is_true = request.form.get('hlog')
-            #if is_checked == is_true:
                 
             return redirect(url_for('main.double_picker'))
-            
-            #elif is_checked == True and is_true == False:
-             #   method = 'hclap'
-              #  return redirect(url_for('single_picker', method = method))
-            
-           # elif is_checked == False and is_true == True:
-            #    method = 'hlog'
-             #   return redirect(url_for('single_picker', method = method))
-            
-            #else:
-             #   return redirect(url_for('single_picker'))
-        
         
         
     return render_template('pygempick.html', title='pyGemPick 1.1.3', form=form )
@@ -199,8 +184,7 @@ def double_picker():
     form = FilterParams()
     if form.validate_on_submit():
         
-        #Check parameters - make sure they're all numbers. 
-        
+        #Check parameters - make sure they're all numbers.
         params = Paramas(author=current_user, anchor1=float(form.anchor1.data), \
                          anchor2=float(form.anchor2.data), minArea=float(form.minArea.data),\
                          minCirc=float(form.minCirc.data), minConc=float(form.minConc.data),\
@@ -240,6 +224,7 @@ def user(username):
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+
     form=EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data

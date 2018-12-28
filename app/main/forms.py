@@ -4,6 +4,17 @@
 Created on Tue Feb 27 16:34:10 2018
 
 @author: joseph
+
+This outlines the 5 form classes which are activated an deployed in .htmls through main/routes.py
+
+>> "used in"
+
+EditProfileForm() >> main/routes.py edit_profile() >> edit_profile.html
+PostForm()        >> main/routes.py index() >> index.html (main page after login)
+PubmedForm()      >> main/routes.py pubmed_search() >> pubmed.html
+ZipForm()         >> main/routes.py pygempick() >> pygempick.html
+FilterParams()    >> main/routes.py double_picker >> single_pick.html
+
 """
 
 from flask_wtf import FlaskForm

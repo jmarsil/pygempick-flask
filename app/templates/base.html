@@ -169,12 +169,12 @@
     }
     
     .pygempick-headers {
-    
+
     background-image: url('/static/picked/sky-828648_1920.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top center;
-    color: #fff !important;
+    color: #343a40 !important;
     padding: 5%;
     
     }
@@ -421,7 +421,7 @@
                                 case 'task_progress':
                                     set_task_progress(
                                         notifications[i].data.task_id,
-                                        notifications[i].data.progress
+                                        notifications[i].data.progress,
                                         notifications[i].data.description);
                                     break;
                             }
@@ -442,13 +442,13 @@
     var header = $('body');
     
     var backgrounds = new Array(
-        "url('/static/picked/blur_6.jpg')"
-      , "url('/static/picked/blur_7.jpg')"
-      , "url('/static/picked/blur_8.jpg')"
-      , "url('/static/picked/blur_9.jpg')"
-      , "url('/static/picked/blur_10.jpg')"
-      , "url('/static/picked/blur_11.jpg')"
-    );
+        "url('./static/picked/blur_6.jpg')"
+      , "url('./static/picked/blur_7.jpg')"
+      , "url('./static/picked/blur_8.jpg')"
+      , "url('./static/picked/blur_9.jpg')"
+      , "url('./static/picked/blur_10.jpg')"
+      , "url('./static/picked/blur_11.jpg')"
+    )
     
     var current = 0;
     
@@ -460,7 +460,7 @@
     setInterval(nextBackground, 3000);
     
     header.css('background-image', backgrounds[0]);
-    };
+    });
 
     {% endif %}
     </script>

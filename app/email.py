@@ -5,7 +5,9 @@ Created on Wed May 23 10:40:54 2018
 
 @author: joseph
 
-Can edit this function for my purposes - send email when job is complete...
+Can edit this function for my purposes - sends email when job or task is completed
+**Needs to be updated and integrated with email server on linode**
+
 """
 
 from flask_mail import Message
