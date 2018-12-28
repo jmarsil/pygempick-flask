@@ -25,31 +25,41 @@ import glob
 from app.models import Task, User
 from app import db
 
+'''
+First task to run is the image compression
+Second task to run is the filtering - can do this all at one shot...
+
+Use values the user just inputted in the database (ie most recent variables) in calculation.
+We don't have to save them all! task can perform in the background and will send email when complete!
+(see 22.2.2.4 in microblog - miguel flask pdf)
+
+Images var obtained from a glob.glob command this is from the most recent archive uploaded static/arch
+file location can be accessed from database images is an archive file in zip format...
+
+Process of particle picking 
+
+1. Get the most recent archive file location by timestamp.
+2. Input that file into this function...
+3. Get the most recent parameters from this user from the database...
+4. Once task is created >> automatically save folder information to process
+   (ie bin folder loc , picked folder loc, data folder loc ect.)
+5. When complete, export those three folders into one final zip that will be 
+   linked on Downloads page of user in routes.py
+
+'''
 
 app = create_app()
 app.app_context().push()
 
-#first task to run is the image compression
-#second task to run is the filtering - can do this all at one shot...
-#Use values the user just inputted in the database (ie most recent variables)
-#in calculation - we don't have to save them all!
-#task can perform in the background and will send email when complete!
-#see 22.2.2.4 in microblog - miguel flask pdf
-
-#images is obtained from a glob.glob command
-#this is from the most recent archive uploaded static/arch - file location can be accessed from database
-# images is an archive file in zip format...
-
-##process of particle picking 
-## get the most rescent archive file location by timestamp...
-## input that file into this function...
-## get the most recent parameters from this user from the database...
-## once task is created >> automatically save folder information to process 
-## exanble bin folder loc , picked folder loc, data folder loc...
-## when complete >> export those three folders into one final zip that will be 
-## sent to the user at her/his email address!
-
 def record_kp(i, keypoints, data):
+    '''
+    :param i: Index of selected image from uploaded .zip
+    :param keypoints: This is the tuple of keypoints. See pygempick.core.pick
+    :param data: Data is the dataframe where the outputted (x,y) coordinates will be concatenated to.
+                 (Note: Can Be empty).
+    :return: Returns the concatenated dataframe with two new rows that contain the (x,y) coordinates
+             of the new coordinates the number of keypoints that were detected.
+    '''
     if len(keypoints) > 0:
         #append x and y coordinates of keypoint center pixels
         #make sure that recording still occurs iff no keypoints detected!
@@ -78,22 +88,32 @@ def record_kp(i, keypoints, data):
 
 
 def picking_main(user_id):
-    
+
     '''
-    
-    args = [anchor1, anchor2, minArea, minCirc, minConc, minIner]
+    :param user_id: This is the database ID of the user. Taken from routes.py
+    :return: 1. path of saved .csv of keypoints summary
+             2. list of path to saved .zip of processed images.
+
+    :var anchor1: The anchor filter value for HCLAP filter (High Contrast Laplacian Filtering)
+    :var anchor2: The anchor filter value for HLOG filter (High-Contrast Laplace of Gaussian)
+    :var minArea: Minimum area threshold of detected gold particle (px^2)
+    :var minCirc: Circularity threshold, .78 is a square...
+    :var minConc: Concavity threshold allows us to filter out detected particles with 'gaps' in the volume.
+    :var minIner: Inertial ratio threshold, filters out elongated particles.
     
     '''
     
     try:
         user = User.query.get(user_id)
         _set_task_progress(0)
-        
-        
-        i = 0 #image counter
-        j = 0 #particle(s) detected counter
+
+        # image counter
+        i = 0
+        # particle(s) detected counter
+        j = 0
         dup = 0
-        data = pd.DataFrame() #make empty data frame to hold keypoints
+        # make empty data frame to hold keypoints
+        data = pd.DataFrame()
         
         #need the most recent uploaded archive
         ZIP = user.own_zips().first()
@@ -122,14 +142,27 @@ def picking_main(user_id):
         
         #read the image file from most rescent archive location
         file_path1 = os.path.join('static/arch/','{}'.format(archive_name))
+
+        l0 = 0
+        img_list = []
+
         with zipfile.ZipFile(file_path1) as images: 
         #read the archive images as namelist
             img_names = images.namelist()
+
+            if l0 == 0:
+                for image in img_names:
+                    img_list.append(image)
+                img_list.sort()
+                print(img_list)
+                print(len(img_list))
+                l0 += 1
+
         
             img_number = []
             part_count = []
             
-            for image in img_names[1:]:
+            for image in img_list:
                 with images.open(image) as tif:
                     imgdata=Image.open(tif).convert('RGB')
                 
@@ -142,9 +175,9 @@ def picking_main(user_id):
                     gray_img = cv2.resize(cv_image, dim, interpolation = cv2.INTER_AREA)
                 else: 
                     gray_img=cv_image
-                #gray_img = cv2.cvtColor(resized_img, cv2.COLOR_RGB2GRAY)
-                ## orig_img = cv2.imread(image) ##reads specific test file image     
-                #gray_img = py.compress(imgdata) #use pygempick to compress image...
+                # gray_img = cv2.cvtColor(resized_img, cv2.COLOR_RGB2GRAY)
+                # orig_img = cv2.imread(image) ##reads specific test file image
+                # gray_img = py.compress(imgdata) #use pygempick to compress image...
         
                 output1 = py.hclap_filt(int(anchor1), gray_img, 'no') #filter image
                 output2 = py.hlog_filt(int(anchor2), gray_img, 'no')  #filter image
@@ -168,7 +201,7 @@ def picking_main(user_id):
                 
                 cv2.imwrite(os.path.join(app.config['IMG_PICKED'], '{}.jpg'.format(i)), picked)
                 
-                myzip.write('{}/{}.jpg'.format(app.config['IMG_PICKED'],i))
+                myzip.write('{}{}.jpg'.format(app.config['IMG_PICKED'], i))
                 
                 # save the image with picked gold particles to memory folder 
                 # >> static/picked/task_id
@@ -177,19 +210,25 @@ def picking_main(user_id):
                 data, k = record_kp(i,keypoints, data)
 
                 dup += dup1
-                j += k # total particles counted 
-                i += 1 # total images
+                # total particles counted
+                j += k
+                # total images
+                i += 1
                 #time.sleep(5)
                 img_number.append(i)
                 part_count.append(k)
                 
                 _set_description(i,j,dup)
                 _set_task_progress(100 * i // len(img_names))
-       
+
+        #add the comments to the Task Summary CSV
         part_count.append('Task Comments:')
         print(comments)
         img_number.append(comments)
-        summary = pd.DataFrame({'Gold Count':part_count,'Image Number':img_number})
+        img_list.append('NA')
+
+        #for pandas.Dataframe (like this) all array/lists have to have same length... hense NA appended to img_name list
+        summary = pd.DataFrame({'Gold Count':part_count,'Image Number':img_number, 'Image Names':img_list})
         file_path = os.path.join('static/to-download/','{}_summary_{}-{}.csv'.format(user, j,i))
         file_path2 = os.path.join('static/to-download/','{}_keypoint_centers_{}-{}.csv'.format(user,j,i))
         summary.to_csv(file_path ,index=False)
@@ -200,66 +239,68 @@ def picking_main(user_id):
         _delete_file(archive_name)
        
         _set_task_descriptor(user, i,j,dup, num_zips)
-        
-# Learn how to implement this feature....!!!        
-#        with open('app/static/to-download/{}_summary_{}-{}.csv'.format(user, j,i)) as csvDataFile:
-#        
-#            send_email('[Microblog] Your blog posts',
-#                sender=app.config['ADMINS'][0], recipients=[user.email],
-#                text_body=render_template('email/export_posts.txt', user=user),
-#                html_body=render_template('email/export_posts.html', user=user),
-#                attachments=[('summary.csv', 'text/csv',csvDataFile)],
-#                sync=True)
-#        
-#        csvDataFile.close()
-        
-#        responsecsv = make_response(data.to_csv())
-#        responsezip = make_response(myzip)
-#        
-#        cd1 = 'attachment; filename=detected_particles.csv'
-#        cd2 = 'attachment;  filename=picked_imgs.zip'
-#        
-#        responsecsv.headers['Content-Disposition'] = cd1
-#        responsezip.headers['Content-Disposition'] = cd2
-#        responsecsv.mimetype='text/csv'
-#        responsezip.mimetype='application/zip'
+
         a,b = 'output_{}-gold-picked_in-{}-images.csv'.format(j,i), 'myzip_{}.zip'.format(num_zips)
         
         return print('Images were sucessfully processed in files: ', a, b)
-        #Response( data.to_csv(), mimetype='text/csv', 
-        #                headers={'Content-Disposition': "attachment; filename=detected_particles.csv"}),\
-        #                Response(myzip, mimetype='application/zip', \
-        #                headers={'Content-Disposition': "attachment; filename=picked_imgs.zip"})
-        
-        #headers.set('Content-Type', 'text/csv')
-        #resp.headers["Content-Disposition"] = "attachment; filename=detected_particles.csv
-        #resp.headers["Content-Type"] = "text/csv"
-        
-        #could also save this to a detsination folder - but have to pre configure that folder.
-
-#        send_email('Your IGEM images were sucessfully processed!',
-#                   sender=app.config['ADMINS'][0], recipients=[user.email],
-#                   text_body=render_template('email/picked_particles.txt', user=user),
-#                   htmp_body=render_template('email/picked_particles.html', user=user),
-#                   attatchments=[('detected_particles.csv', 'text/csv', resp)],
-#                   sync=True)
-        
-        
-        #send email with the saved CSV of recorded detected Gold particle centers
-        #in email record how many particels were detected!
 
     except:
         _set_task_progress(100)
         app.logger.error('Unhandled exception', exc_info=sys.exc_info())
-    
-    # save dataframe to csv >> static/CSV/task_id ...
-    # finally save.to_csv('enter_name.csv'.format(dr),index=False)
-    # have to keep track of the final file location to put back into zip!
-    # look into automatically deleting files >> concurrently removing their name
-    # from the database 
-    # allow users to choose from images they've previously uploaded!
-    
-#create wrapper function dedicated to update the task/progress being performed in the background!
+
+        # Learn how to implement this feature....!!!
+        #        with open('app/static/to-download/{}_summary_{}-{}.csv'.format(user, j,i)) as csvDataFile:
+        #
+        #            send_email('[Microblog] Your blog posts',
+        #                sender=app.config['ADMINS'][0], recipients=[user.email],
+        #                text_body=render_template('email/export_posts.txt', user=user),
+        #                html_body=render_template('email/export_posts.html', user=user),
+        #                attachments=[('summary.csv', 'text/csv',csvDataFile)],
+        #                sync=True)
+        #
+        #        csvDataFile.close()
+
+        #        responsecsv = make_response(data.to_csv())
+        #        responsezip = make_response(myzip)
+        #
+        #        cd1 = 'attachment; filename=detected_particles.csv'
+        #        cd2 = 'attachment;  filename=picked_imgs.zip'
+        #
+        #        responsecsv.headers['Content-Disposition'] = cd1
+        #        responsezip.headers['Content-Disposition'] = cd2
+        #        responsecsv.mimetype='text/csv'
+        #        responsezip.mimetype='application/zip'
+
+        # Response( data.to_csv(), mimetype='text/csv',
+        #                headers={'Content-Disposition': "attachment; filename=detected_particles.csv"}),\
+        #                Response(myzip, mimetype='application/zip', \
+        #                headers={'Content-Disposition': "attachment; filename=picked_imgs.zip"})
+
+        # headers.set('Content-Type', 'text/csv')
+        # resp.headers["Content-Disposition"] = "attachment; filename=detected_particles.csv
+        # resp.headers["Content-Type"] = "text/csv"
+
+        # could also save this to a destination folder - but have to pre configure that folder.
+
+        #        send_email('Your IGEM images were successfully processed!',
+        #                   sender=app.config['ADMINS'][0], recipients=[user.email],
+        #                   text_body=render_template('email/picked_particles.txt', user=user),
+        #                   htmp_body=render_template('email/picked_particles.html', user=user),
+        #                   attachments=[('detected_particles.csv', 'text/csv', resp)],
+        #                   sync=True)
+
+        # send email with the saved CSV of recorded detected Gold particle centers
+        # in email record how many particles were detected!
+
+        # save data frame to csv >> static/CSV/task_id ...
+        # finally save.to_csv('enter_name.csv'.format(dr),index=False)
+        # have to keep track of the final file location to put back into zip!
+        # look into automatically deleting files >> concurrently removing their name
+        # from the database
+        # allow users to choose from images they've previously uploaded!
+
+        # create wrapper function dedicated to update the task/progress being performed in the background!
+
 def _delete_file(archive_name):
     
     file_path = os.path.join('static/arch/','{}'.format(archive_name))
@@ -268,7 +309,12 @@ def _delete_file(archive_name):
     print('{} Successfuly Deleted'.format(archive_name))
 
 def _set_task_progress(progress):
-    
+
+    '''
+    :param progress: Updates the progress :var of the task
+    :return:  When progress == 100, redis task is completed
+    '''
+
     job = get_current_job()
     if job:
         job.meta['Picker Progress:'] = progress
@@ -281,9 +327,21 @@ def _set_task_progress(progress):
             
         db.session.commit()
         
-#create a wrapper function to update the tasks description. 
-#only picking when done...
+# create a wrapper function to update the tasks description.
+# only picking when done...
+
 def _set_task_descriptor(user, i,j, dup, num_zip):
+
+    '''
+    :param user: User name/id
+    :param i: Total images counted
+    :param j: Total particles counted
+    :param dup: The total duplicates counted...
+    :param num_zip: The value of the .zip folder...
+
+    :return: db.session.commit() saves paths of processed files to Tasks column in database.
+             Paths will be accessed by routes.py and pushed to downloads.html
+    '''
     job = get_current_job()
     if job:
         task = Task.query.get(job.get_id())
@@ -296,6 +354,13 @@ def _set_task_descriptor(user, i,j, dup, num_zip):
         db.session.commit()
         
 def _set_description(i,j,dup):
+
+    '''
+    :param i: Total images counted
+    :param j: Total particles counted
+    :param dup: The total duplicates counted...
+    :return: db.session.commit() saves progress to Tasks column in database.
+    '''
     
     job = get_current_job()
     if job:
@@ -308,6 +373,10 @@ def _set_description(i,j,dup):
         db.session.commit()
 
 def search(query):
+    '''
+    :param query: From pubmed.html form to search database.
+    :return: Returns dictionary with pubmed search results
+    '''
     Entrez.email = 'josephmarsilla@gmail.com'
     handle = Entrez.esearch(db='pubmed', 
                             sort='relevance', 
@@ -318,6 +387,10 @@ def search(query):
     return results
 
 def fetch_details(id_list):
+    '''
+    :param id_list: Id's of (and up to) the first 10 articles
+    :return: Returns modified dictionary with PubMed search results
+    '''
     ids = ','.join(id_list)
     Entrez.email = 'josephmarsilla@gmail.com'
     handle = Entrez.efetch(db='pubmed',
@@ -327,6 +400,10 @@ def fetch_details(id_list):
     return results
 
 def article_search(user_id):
+    '''
+    :param user_id: User name/id to get database column
+    :return: Saves PubMed selected queries (article titles) & abstracts in .txt to access by routes.py
+    '''
     try:
         user = User.query.get(user_id)
         search_term = user.recent_searchs
