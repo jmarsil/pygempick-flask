@@ -4,6 +4,16 @@
 Created on Tue Feb 27 16:34:10 2018
 
 @author: joseph
+
+This outlines the 4 form classes which are activated an deployed in .htmls through auth/routes.py
+
+>> "used in"
+
+LoginForm() >> auth/routes.py login() >> templates/auth/login.html
+RegistrationForm() >> auth/routes.py register() >> templates/auth/register.html
+ResetPasswordRequestForm() >> auth/routes.py reset_password_request() >> reset_password_request.html
+ResetPasswordForm() >> auth/routes.py reset_password() >> reset_password.html
+
 """
 
 from flask_wtf import FlaskForm
